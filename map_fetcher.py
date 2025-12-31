@@ -7,7 +7,7 @@ from pathlib import Path
 
 def fetch_image(lat:float, lon:float, zoom:int = 16, size:str = "640x640") -> Optional[bytes]:
 
-    ACCESS_TOKEN = "pk.eyJ1IjoiYmFrYS1wcmFuamFsIiwiYSI6ImNtamN2ZjRycjB4NWwzZXIwNG4xemNtZDIifQ.-VDq7PmWhiGlc3tGp40Vjw"
+    ACCESS_TOKEN = "your access token"
     url = (f"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/{lon},{lat},{zoom}/{size}")
     params = {
         "access_token": ACCESS_TOKEN
@@ -58,9 +58,14 @@ if __name__ == "__main__":
     #     with open("map_test.png","wb") as f:
     #         f.write(img)
     
-    output_dir = Path("Map_Images_Test")
+    output_dir_test = Path("Map_Images_Test")
+    output_dir_train = Path("Map_Images")
 
-    df = pd.read_csv('test2.csv')
+    df_train = pd.read_csv('train(1).csv')
+    df_images_train = image_Dataset(df_train,output_dir=output_dir_train)
+    df_images_train.to_csv("train_with_images.csv",index=False)
+    
+    df_test = pd.read_csv('test2.csv')
+    df_images_test = image_Dataset(df_test,output_dir=output_dir_test)
+    df_images_test.to_csv("test_with_images.csv",index=False)
 
-    df_images = image_Dataset(df,output_dir=output_dir)
-    df_images.to_csv("test_with_images.csv",index=False)
