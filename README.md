@@ -1,81 +1,81 @@
-# Multimodal House Price Prediction Using Satellite Imagery and Tabular Data
-This repository contains a machine learning pipeline for predicting real estate prices using a multimodal approach. The system combines traditional tabular data (house features like bedrooms, square footage, etc.) with satellite imagery of the properties to improve prediction accuracy.
+# Multimodal House Price Prediction
 
-## Project Overview
-The project is divided into three main components:
+A machine learning pipeline for predicting real estate prices using satellite imagery and tabular data.
 
-**Map Data Acquisition:** A script to automate the retrieval of satellite imagery based on property coordinates.
+## Overview
 
-**Data Preprocessing:** A notebook for cleaning tabular data and preparing image paths for training.
+This project combines traditional property features (bedrooms, square footage, location) with satellite imagery using a dual-input deep learning architecture. The model uses ResNet50 for image feature extraction and a dense neural network for numerical data, fusing both modalities for improved prediction accuracy.
 
-**Model Training:** A deep learning pipeline that uses a dual-input architecture (CNN for images and a Dense network for numerical data).
+## Prerequisites
 
-## Project Structure
-**map_fetcher.py:** Python script utilizing the Mapbox API to fetch static satellite images for properties using latitude and longitude.
-
-**preprocessing.ipynb:** Jupyter notebook for data cleaning, logarithmic price transformation, and feature scaling.
-
-**model_training.ipynb:** Jupyter notebook for building, training, and evaluating the multimodal ResNet50-based neural network and XGBoost models.
-
-## Setup Instructions
-*Prerequisites*
-Python 3.8 or higher
-
-A Mapbox Access Token (for image retrieval)
-
-A GPU is recommended for model training (TensorFlow/Keras)
+- Python 3.8+
+- Mapbox Access Token
+- GPU recommended for training
 
 ## Installation
-Clone the repository:
 
-```
-git clone https://github.com/your-username/property-price-predictor.git
+```bash
+git clone https://github.com/BakaPranjal/CDC_Open_Project_2025.git
 cd property-price-predictor
+pip install -r requirements.txt
 ```
 
-## Install the required dependencies:
-```
+**Dependencies:**
+```bash
 pip install pandas numpy tensorflow scikit-learn matplotlib seaborn xgboost opencv-python requests
 ```
-## Usage
-1. Fetching Map Data
-Before training, you must fetch the satellite images. Open map_fetcher.py and replace "your access token" with your actual Mapbox API key. Run the script to download images:
 
-```
+## Usage
+
+### 1. Fetch Satellite Images
+
+Replace the Mapbox token in `map_fetcher.py` and run:
+
+```bash
 python map_fetcher.py
 ```
-Images will be saved to the Map_Images_Test or Map_Images_Train directories by default.
 
-2. Data Preprocessing
-Run the **_preprocessing.ipynb_** notebook to:
+Images will be saved to `Map_Images_Train/` and `Map_Images_Test/` directories.
 
-* Clean missing values from the dataset.
-* Apply log transformation to the price column to handle skewness.
-* Scale numerical features using StandardScaler.
-* Verify that all image_path entries correspond to downloaded files.
+### 2. Preprocess Data
 
-3. Training the Model
-The **_model_training.ipynb_** notebook handles the multimodal learning process:
+Run `preprocessing.ipynb` to:
+- Clean missing values
+- Apply log transformation to prices
+- Scale numerical features
+- Validate image paths
 
-* **Image Branch:** Uses a ResNet50 backbone (pre-trained on ImageNet) for feature extraction from property images.
-* **Numerical Branch:** A fully connected neural network for tabular data features.
-* **Fusion Layer:** Concatenates both branches into a single output layer for price regression.
+### 3. Train Model
 
-To train the model, ensure the paths to your processed CSV files are correctly set in the notebook.
+Execute `model_training.ipynb` to train the multimodal model. The notebook includes:
+- Data loading and augmentation
+- Model architecture setup
+- Training with early stopping
+- Performance evaluation
 
 ## Model Architecture
-The deep learning model uses a late-fusion strategy:
 
-* **Visual Features:** Extracted via ResNet50 with Global Average Pooling.
+**Image Branch:**
+- ResNet50 (pre-trained on ImageNet)
+- Global Average Pooling
+- Output: 2048-dimensional feature vector
 
-* **Numerical Features:** Processed through multiple Dense layers with Dropout and Batch Normalization.
+**Numerical Branch:**
+- Dense layers with Dropout and Batch Normalization
+- Output: 128-dimensional feature vector
 
-_Optimization:_ Adam optimizer with Huber loss for robustness against outliers.
+**Fusion:**
+- Concatenation of both branches
+- Dense layers for final prediction
+
+**Training:**
+- Loss: Huber loss
+- Optimizer: Adam
+- Callbacks: Early stopping, learning rate reduction
 
 ## Evaluation Metrics
-The pipeline evaluates performance using:
 
-* Root Mean Squared Error (RMSE)
-* Mean Absolute Error (MAE)
-* R-squared (R2) Score
-* Mean Absolute Percentage Error (MAPE)
+- Root Mean Squared Error (RMSE)
+- Mean Absolute Error (MAE)
+- R-squared (R²)
+- Mean Absolute Percentage Error (MAPE)
