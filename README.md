@@ -1,4 +1,4 @@
-# Multimodal House Price Prediction
+# Multimodal Property Price Prediction
 
 A machine learning pipeline for predicting real estate prices using satellite imagery and tabular data.
 
